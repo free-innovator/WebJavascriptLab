@@ -1,0 +1,266 @@
+@charset "UTF-8";
+/* ==================================================
+    Font
+================================================== */
+@font-face {
+    font-family: 'nsKR';
+    src: url(../fonts/NotoSansKR-Regular.otf) format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'nsKR';
+    src: url(../fonts/NotoSansKR-Light.otf) format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'nsKR';
+    src: url(../fonts/NotoSansKR-Medium.otf) format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'nsKR';
+    src: url(../fonts/NotoSansKR-Bold.otf) format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* ==================================================
+    Reset CSS
+================================================== */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* custom */
+a {
+    text-decoration: none; color: inherit;
+}
+button {
+    border: 0; padding: 0; font-size: 0; cursor: pointer;
+}
+img {
+    vertical-align: top;
+}
+
+/* ==================================================
+    Common
+================================================== */
+body {
+    outline: none;
+    color: #333; font-family: "nsKR", Arial, Helvetica, sans-serif;
+    word-break:break-all; line-height: 1.3; letter-spacing: -0.25px;
+}
+.hidden {width:0;height:0;overflow:0;font-size:0;line-height:0;text-indent:-9999px;}
+.fl { float: left; }
+.fr { float: right; }
+
+/* ==================================================
+    Layout
+================================================== */
+#skip_nav a{
+    display: block; width: 100%; height: 0; overflow: hidden;
+    position: absolute; top: -9999px; left: 0; z-index: 9999;
+}
+#skip_nav a:focus{
+    height: auto; padding: 1vw 0; 
+    top: 0;
+    color: #111; font-weight: bold; text-align: center;
+    background-color: #e9e9e9; 
+}
+
+#wrap {
+    width: 100%; min-height: 100vh; margin: 0 auto; overflow: hidden;
+    background-color: #f7f7f7;
+}
+
+.header {
+    display: flex; justify-content: space-between; align-items: center;
+    height: 10vw; padding: 0 1vw; overflow: hidden; 
+    font-size: 0;
+}
+.header .gnb-list {display: flex; align-items: center;}
+.header .gnb-list img {vertical-align: middle;}
+
+#container>section {
+    padding: 0 6vw; position: relative;
+}
+#container>section::after{ content: ''; display: block; clear: both; }
+#container>section:nth-child(odd){
+    background-color: rgb(49, 149, 247);
+}
+#container>section .title{
+    position: absolute;
+}
+#container>section .title>h2{
+    width: 20vw;
+    margin-bottom: 8vw; padding-top: 10vw;
+    position: relative; 
+    color: #fff; font-size: 5.5vw; font-weight: 300;
+}
+#container>section:nth-child(even) .title>h2{ color: #222; }
+#container>section .title>h2::after{ 
+    content: ''; 
+    width: 4vw; height: 0.5vw;
+    position: absolute; left: 0; bottom: -3vw; 
+    background-color: #fff;
+}
+#container>section:nth-child(even) .title>h2::after{ background-color: #444; }
+#container>section .title>h2>span{ font-weight: bold; }
+#container>section .title .cnt{ 
+    display: block; height: 5vw; width: 15vw; border-radius: 4vw;
+    font-weight: 300; font-size: 2.4vw; color: #ccc; line-height: 5vw; text-align: center;
+    background-color: rgb(35, 123, 213); 
+}
+#container>section:nth-child(even) .title .cnt{ 
+    color: #999;
+    background-color: #ddd;
+}
+#container>section .title .cnt>span{ color: #fff; }
+#container>section:nth-child(even) .title .cnt>span{ color: #444; }
+/* */
+#container>section .account-list{ 
+    float: left; padding: 12vw 0 12vw 26vw;
+    color: #666;
+}
+#container>section .account-info{
+    width: 80vw; border-radius: 1vw; box-shadow: 0 0 2vw rgba(0, 0, 0, 0.1);
+    font-size: 3.5vw;
+    background-color: #fff; 
+}
+#container>section .account-info>div::after{ content: ''; display: block; clear: both }
+#container>section .account-info>div:nth-child(1){
+    padding: 3vw 4vw;
+}
+#container>section .account-info>div:nth-child(2){
+    padding: 6vw 0; border-bottom: 1px solid #eee;
+    text-align: center; line-height: 1.5;
+}
+#container>section .account-info>div:nth-child(2) .value{
+    font-size: 5vw; font-weight: bold;
+}
+#container>section .account-info .btn-list::after { content: ''; display: block; clear: both }
+#container>section .account-info .btn-list>li{
+    box-sizing: border-box;
+    float: left; width: 50%;
+    text-align: center;
+}
+#container>section .account-info .btn-list>li+li {
+    border-left: 1px solid #eee;
+}
+#container>section .account-info .btn-list>li>a{
+    display: block; width: 100%; padding: 4vw 0;
+}
+/* */
+#container>section .account-balance{
+    position: absolute; left: 5vw; bottom: 3vw;
+    color: #ddd; font-size: 2.5vw; letter-spacing: 0.2vw;
+}
+#container>section:nth-child(even) .account-balance{ color: #333 }
+#container>section .account-balance .value{
+    color: #fff; font-size: 3.5vw; font-weight: bold;
+}
+#container>section:nth-child(even) .account-balance .value{ color: #111 }
+#container>section .account-balance .help{
+    display: inline-block; width: 5vw; height: 5vw; border-radius: 50%;
+    position: relative;
+    color: #fff; text-align: center; line-height: 5vw;
+    background-color: rgb(35, 123, 213);
+    cursor: pointer;
+}
+#container>section .account-balance .help:hover::before{
+    content: '';
+    display: block; width: 0; height: 0; 
+    position: absolute; left: calc(-0.5vw); bottom: 3vw;
+    border: 3vw solid transparent; border-top-color: #555;
+}
+#container>section .account-balance .help:hover::after{
+    content: attr(data-help);
+    display: block; width: 40vw; border-radius: 2vw; padding: 0 1.5vw;
+    position: absolute; left: calc(-20vw + 50%); bottom: 8vw;
+    line-height: 4;
+    background-color: #555;
+}
+#container>section:nth-child(even) .account-balance .help{
+    background-color: #ddd;
+}
+/* */
+#container .section-slide {
+    box-sizing: border-box; 
+    display: block; width: 100%; padding: 8vw 0 13vw; overflow: hidden;
+    color: #333; font-size: 4.5vw; line-height: 1.5;
+}
+#container .section-slide .slide-panel::after { content: ''; display: block; clear: both; }
+#container .section-slide .slide-panel>li {
+    box-sizing: border-box;
+    float: left; padding: 0 5vw;
+}
+#container .section-slide .slide-panel em{
+    display: block;
+    font-weight: 500;
+}
+
+#container .indi-panel {
+    display: flex; align-items: center;
+    position: absolute; left: 4.5vw; bottom: 6.5vw;
+}
+#container .indi {
+    margin-left: 3.7vw;
+}
+#container .indi>li {
+    float: left; width: 1.8vw; height: 1.8vw; border-radius: 1.8vw;
+    font-size: 0;
+    background-color: #bbb;    
+    cursor: pointer;
+}
+#container .indi>li.active {
+    width: 3.7vw;
+    background-color: rgb(49, 149, 247);
+}
+#container .indi>li+li { margin-left: 1vw;}
