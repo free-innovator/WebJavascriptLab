@@ -35,25 +35,27 @@ ScrollEventManager.prototype.dispatch = function () {
     window.dispatchEvent(scrollEvent);
 };
 
-ScrollEventManager.prototype.registerTimeline = function (target, marginRate, data) {
+ScrollEventManager.prototype.registerTimeline = function (target, marginRate, callback) {
     var i, len, curIndex;
-    var mediaQuery, timelineJS, timelineJSArray;
+    var mediaQuery, timelineSJ, timelineSJArray;
+    var data = callback();
 
     len = data.length;
-    timelineJSArray = [];
+    timelineSJArray = [];
     for (i = 0; i < len; i++) {
-        timelineJSArray.push(data[i][1]);
+        timelineSJArray.push(data[i][1]);
+        timelineSJArray[i].reset();
     }
 
     curIndex = -1;
     function responseTimeline() {
-        var i;
+        var i, j;
         var isFinish = false;
         var maxProgress, progress;
 
         maxProgress = 0;
         for (i = 0; i < len; i++) {
-            progress = timelineJSArray[i].progress();
+            progress = timelineSJArray[i].progress() || 0;
             if (progress < 1) {
                 maxProgress = Math.max(maxProgress, progress);
             } else {
@@ -68,14 +70,15 @@ ScrollEventManager.prototype.registerTimeline = function (target, marginRate, da
         }
         for (i = 0; i < len; i++) {
             mediaQuery = data[i][0];
-            timelineJS = data[i][1];
+            timelineSJ = data[i][1];
 
             if (window.matchMedia(mediaQuery).matches) {
                 if (i !== curIndex) {
-                    if (curIndex >= 0) {
-                        timelineJSArray[curIndex].reset();
+                    for (j = 0; j < len; j++) {
+                        timelineSJArray[j].reset();
                     }
-                    timelineJS.progress(maxProgress).play();
+                    timelineSJ.init();
+                    timelineSJ.progress(maxProgress).play();
                     curIndex = i;
                 }
                 break;
