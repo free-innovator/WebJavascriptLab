@@ -1,0 +1,28 @@
+@charset 'UTF-8';
+
+.section {
+    position: relative;
+    min-height: 100vh;
+}
+.section1 {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+
+    box-sizing: border-box;
+    padding: 5vw;
+}
+.ball {
+    position: absolute;
+    width: 10vw;
+    height: 10vw;
+    background-color: #ececec;
+    border-radius: 50%;
+    top: 5vw;
+}
+.ball:nth-child(1) {
+    left: 33%;
+}
+.ball:nth-child(2) {
+    left: 66%;
+}

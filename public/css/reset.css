@@ -143,3 +143,10 @@ button {
 img {
     vertical-align: top;
 }
+.hidden {
+    height: 0;
+    width: 0;
+    font-size: 0;
+    line-height: 0;
+    text-indent: -9999px;
+}
