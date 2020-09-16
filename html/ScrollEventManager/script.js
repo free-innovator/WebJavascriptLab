@@ -1,54 +1,34 @@
 window.addEventListener("load", function () {
     var section1 = document.querySelector(".section1");
     var section2 = document.querySelector(".section2");
-    var target = document.querySelectorAll(".section1 .ball");
-    var target2 = document.querySelectorAll(".section2 .ball");
 
     var scrollEventManager = new ScrollEventManager();
-    var timeline1 = new TimelineSJ().delay(0.5);
-    timeline1.fromTo(
-        target,
-        6,
-        { y: 0 },
-        {
-            y: 500,
-        }
-    );
-    var timeline2 = new TimelineSJ().delay(0.5);
-    timeline2.fromTo(
-        target,
-        6,
-        { x: 0 },
-        {
-            x: 500,
-        }
-    );
-    var timeline3 = new TimelineSJ().delay(0.5);
-    timeline3.fromTo(
-        target2,
-        6,
-        { y: 0 },
-        {
-            y: 500,
-        }
-    );
-    var timeline4 = new TimelineSJ().delay(0.5);
-    timeline4.fromTo(
-        target2,
-        6,
-        { x: 0 },
-        {
-            x: 500,
-        }
-    );
+    scrollEventManager
+        .setGlobalTimeScale(0.75)
+        .setGlobalDelay(0.5)
+        .registerTimelines(section1, 0.3, function () {
+            var pcTL = scrollEventManager.createTimeline();
+            var moTL = scrollEventManager.createTimeline();
+            var ball = document.querySelector(".section1 .ball");
 
-    scrollEventManager.registerTimeline(section1, 0.2, [
-        ["(max-width:1300px)", timeline1],
-        ["all", timeline2],
-    ]);
-    scrollEventManager.registerTimeline(section2, 0.2, [
-        ["(max-width:1300px)", timeline3],
-        ["all", timeline4],
-    ]);
-    scrollEventManager.dispatch();
+            pcTL.fromTo(ball, 10, { x: 0 }, { x: 300 });
+            moTL.fromTo(ball, 10, { y: 0 }, { y: 300 });
+            return [
+                ["(max-width:759px)", moTL],
+                ["all", pcTL],
+            ];
+        })
+        .registerTimelines(section2, 0.3, function () {
+            var pcTL = scrollEventManager.createTimeline();
+            var moTL = scrollEventManager.createTimeline();
+            var ball = document.querySelector(".section2 .ball");
+
+            pcTL.fromTo(ball, 10, { x: 0 }, { x: 300 });
+            moTL.fromTo(ball, 10, { y: 0 }, { y: 300 });
+            return [
+                ["(max-width:759px)", moTL],
+                ["all", pcTL],
+            ];
+        })
+        .dispatch();
 });

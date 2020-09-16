@@ -77,7 +77,7 @@ TimelineSJ.prototype.reset = function () {
     var i, len;
     var target;
 
-    this._timeline.pause();
+    this._timeline.pause().progress(0);
     len = this._tweenMaxAffectData.length;
     for (i = 0; i < len; i++) {
         target = this._tweenMaxAffectData[i][0];
