@@ -7,6 +7,7 @@ function TimelineSJ() {
 }
 
 TimelineSJ.prototype.initialize = function () {
+    this._unit = "px";
     this._timeline = this._createTimeline();
     this._tweenMaxAffectData = [];
     this._removePropertyArray = ["left", "right", "bottom", "top", "width", "height"];
@@ -45,8 +46,11 @@ TimelineSJ.prototype.reset = function () {
     }
 };
 TimelineSJ.prototype.init = function () {
+    var _unit = this._unit;
     function assignStyle(element, obj) {
-        var keys = Object.keys(obj);
+        var keys = Object.keys(obj).filter(function (x) {
+            return ["x", "y", "scale", "rotation"].indexOf(x) < 0;
+        });
         var len = keys.length;
         var i;
         for (i = 0; i < len; i++) {
@@ -56,7 +60,7 @@ TimelineSJ.prototype.init = function () {
                 case "top":
                 case "bottom":
                     if (parseInt(obj[keys[i]]) === obj[keys[i]]) {
-                        element.style[keys[i]] = obj[keys[i]] + "rem";
+                        element.style[keys[i]] = obj[keys[i]] + this._unit;
                     } else {
                         element.style[keys[i]] = obj[keys[i]];
                     }
@@ -66,6 +70,13 @@ TimelineSJ.prototype.init = function () {
                     break;
             }
         }
+
+        var x, y, scale, rotation;
+        x = obj["x"] || 0;
+        y = obj["y"] || 0;
+        scale = obj["scale"] === undefined ? 1 : obj["scale"];
+        rotation = obj["rotation"] || 0;
+        element.style.transform = "scale(" + scale + ") rotate(" + rotation + "deg) translate(" + x + _unit + "," + y + _unit + ")";
     }
 
     var i, j, len, len2;
@@ -73,7 +84,7 @@ TimelineSJ.prototype.init = function () {
 
     this.reset();
     len = this._tweenMaxAffectData.length;
-    for (i = 0; i < len; i++) {
+    for (i = len - 1; i >= 0; i--) {
         target = this._tweenMaxAffectData[i][0];
         vars = this._tweenMaxAffectData[i][1];
 
@@ -120,6 +131,8 @@ TimelineSJ.prototype.to = function (target, duration, vars, position) {
 TimelineSJ.prototype.fromTo = function (target, duration, fromVars, toVars, position) {
     this._tweenMaxAffectData.push([target, fromVars]);
     this._timeline.fromTo(target, duration, fromVars, toVars, position);
+    // this._timeline.set(target, fromVars, position);
+    // this._timeline.to(target, duration, toVars, position);
     return this;
 };
 TimelineSJ.prototype.staggerFromTo = function (targets, duration, fromVars, toVars, stagger, position, onCompleteAll, onCompleteAllParams, onCompleteScope) {
@@ -146,6 +159,10 @@ TimelineSJ.prototype.play = function (from, suppressEvents) {
 };
 TimelineSJ.prototype.pause = function (atTime, suppressEvents) {
     this._timeline.pause(atTime, suppressEvents);
+    return this;
+};
+TimelineSJ.prototype.addLabel = function (label, position) {
+    this._timeline.addLabel(label, position);
     return this;
 };
 /*

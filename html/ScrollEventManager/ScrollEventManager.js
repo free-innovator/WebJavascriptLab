@@ -6,7 +6,10 @@ function ScrollEventManager() {
     this.initialize.apply(this, arguments);
 }
 
-ScrollEventManager.prototype.initialize = function () {};
+ScrollEventManager.prototype.initialize = function () {
+    this._globalTimeScale = 1;
+    this._globalDelay = 0;
+};
 
 ScrollEventManager.prototype.isShowing = function (target, yOffset, marginRate) {
     return window.pageYOffset + target.getBoundingClientRect().top < yOffset + screen.availHeight * (1 - Math.max(0, Math.min(1, marginRate)));
@@ -27,15 +30,28 @@ ScrollEventManager.prototype.register = function (target, marginRate, callback) 
         }
     }
     window.addEventListener("scroll", handlingScrollEvent);
-    return handlingScrollEvent;
+    return this;
 };
 ScrollEventManager.prototype.dispatch = function () {
     var scrollEvent = document.createEvent("Event");
     scrollEvent.initEvent("scroll", true, true);
     window.dispatchEvent(scrollEvent);
+    return this;
 };
 
+ScrollEventManager.prototype.createTimeline = function () {
+    return new TimelineSJ().delay(this._globalDelay).timeScale(this._globalTimeScale);
+};
 ScrollEventManager.prototype.registerTimeline = function (target, marginRate, callback) {
+    var timelineSJ = this.createTimeline();
+    this.register(target, marginRate, function () {
+        callback(timelineSJ);
+        timelineSJ.init();
+        timelineSJ.play();
+    });
+    return this;
+};
+ScrollEventManager.prototype.registerTimelines = function (target, marginRate, callback) {
     var i, len, curIndex;
     var mediaQuery, timelineSJ, timelineSJArray;
     var data = callback();
@@ -92,6 +108,16 @@ ScrollEventManager.prototype.registerTimeline = function (target, marginRate, ca
         window.addEventListener("resize", responseTimeline);
         window.dispatchEvent(resizeEvent);
     });
+    return this;
+};
+
+ScrollEventManager.prototype.setGlobalTimeScale = function (globalTimeScale) {
+    this._globalTimeScale = globalTimeScale;
+    return this;
+};
+ScrollEventManager.prototype.setGlobalDelay = function (globalDelay) {
+    this._globalDelay = globalDelay;
+    return this;
 };
 /*
     END ScrollEventManager
