@@ -63,11 +63,14 @@ ScrollEventManager.prototype.registerTimelines = function (target, marginRate, c
         mediaQuery = data[i][0];
         timelineSJ = data[i][1];
 
+        timelineSJ.reset();
         timelineSJArray.push(timelineSJ);
+    }
+    for (i = 0; i < len; i++) {
+        mediaQuery = data[i][0];
         if (window.matchMedia(mediaQuery).matches) {
             timelineSJArray[i].init();
-        } else {
-            timelineSJArray[i].reset();
+            break;
         }
     }
 
@@ -76,6 +79,7 @@ ScrollEventManager.prototype.registerTimelines = function (target, marginRate, c
         var i, j;
         var isFinish = false;
         var maxProgress, progress;
+        var mediaQuery, timelineSJ;
 
         maxProgress = 0;
         for (i = 0; i < len; i++) {
