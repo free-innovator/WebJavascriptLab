@@ -44,9 +44,10 @@ ScrollEventManager.prototype.createTimeline = function () {
 };
 ScrollEventManager.prototype.registerTimeline = function (target, marginRate, callback) {
     var timelineSJ = this.createTimeline();
+    timelineSJ = callback(timelineSJ) || timelineSJ;
+    timelineSJ.init();
+
     this.register(target, marginRate, function () {
-        callback(timelineSJ);
-        timelineSJ.init();
         timelineSJ.play();
     });
     return this;
@@ -59,8 +60,15 @@ ScrollEventManager.prototype.registerTimelines = function (target, marginRate, c
     len = data.length;
     timelineSJArray = [];
     for (i = 0; i < len; i++) {
-        timelineSJArray.push(data[i][1]);
-        timelineSJArray[i].reset();
+        mediaQuery = data[i][0];
+        timelineSJ = data[i][1];
+
+        timelineSJArray.push(timelineSJ);
+        if (window.matchMedia(mediaQuery).matches) {
+            timelineSJArray[i].init();
+        } else {
+            timelineSJArray[i].reset();
+        }
     }
 
     curIndex = -1;

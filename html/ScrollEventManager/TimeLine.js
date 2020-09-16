@@ -9,6 +9,7 @@ function TimelineSJ() {
 TimelineSJ.prototype.initialize = function () {
     this._unit = "px";
     this._timeline = this._createTimeline();
+    this._callbackList = [];
     this._tweenMaxAffectData = [];
     this._removePropertyArray = ["left", "right", "bottom", "top", "width", "height"];
 };
@@ -24,62 +25,80 @@ TimelineSJ.prototype._removeStyle = function (target) {
     }
     target.style = {}; // IE, not working
 };
+TimelineSJ.prototype._assignStyle = function (element, obj) {
+    var keys = Object.keys(obj).filter(function (x) {
+        return ["x", "y", "scale", "rotation"].indexOf(x) < 0;
+    });
+    var len = keys.length;
+    var i;
+    for (i = 0; i < len; i++) {
+        switch (keys[i]) {
+            case "right":
+            case "left":
+            case "top":
+            case "bottom":
+                if (parseInt(obj[keys[i]]) === obj[keys[i]]) {
+                    element.style[keys[i]] = obj[keys[i]] + this._unit;
+                } else {
+                    element.style[keys[i]] = obj[keys[i]];
+                }
+                break;
+            default:
+                element.style[keys[i]] = obj[keys[i]];
+                break;
+        }
+    }
+
+    var x, y, scale, rotation;
+    x = obj["x"] || 0;
+    y = obj["y"] || 0;
+    scale = obj["scale"] === undefined ? 1 : obj["scale"];
+    rotation = obj["rotation"] || 0;
+    element.style.transform = "scale(" + scale + ") rotate(" + rotation + "deg) translate(" + x + this._unit + "," + y + this._unit + ")";
+};
+
 TimelineSJ.prototype.getTimeline = function () {
     return this._timeline;
 };
 TimelineSJ.prototype.reset = function () {
-    var i, j, len, len2;
+    var _removeStyle = this._removeStyle.bind(this);
+    function removeStyle(target) {
+        var i, len;
+        len = target.length;
+        if (!len) {
+            _removeStyle(target);
+        } else {
+            for (i = 0; i < len; i++) {
+                removeStyle(target[i]);
+            }
+        }
+    }
+
+    var i, len;
     var target;
 
     this._timeline.pause();
     len = this._tweenMaxAffectData.length;
     for (i = 0; i < len; i++) {
         target = this._tweenMaxAffectData[i][0];
-        len2 = target.length;
-        if (!len2) {
-            this._removeStyle(target);
-        } else {
-            for (j = 0; j < len2; j++) {
-                this._removeStyle(target[j]);
-            }
-        }
+        removeStyle(target);
     }
 };
 TimelineSJ.prototype.init = function () {
-    var _unit = this._unit;
+    var _assignStyle = this._assignStyle.bind(this);
     function assignStyle(element, obj) {
-        var keys = Object.keys(obj).filter(function (x) {
-            return ["x", "y", "scale", "rotation"].indexOf(x) < 0;
-        });
-        var len = keys.length;
-        var i;
-        for (i = 0; i < len; i++) {
-            switch (keys[i]) {
-                case "right":
-                case "left":
-                case "top":
-                case "bottom":
-                    if (parseInt(obj[keys[i]]) === obj[keys[i]]) {
-                        element.style[keys[i]] = obj[keys[i]] + this._unit;
-                    } else {
-                        element.style[keys[i]] = obj[keys[i]];
-                    }
-                    break;
-                default:
-                    element.style[keys[i]] = obj[keys[i]];
-                    break;
+        var i, len;
+        len = element.length;
+        if (!len) {
+            _assignStyle(element, obj);
+        } else {
+            for (i = 0; i < len; i++) {
+                assignStyle(element[i], obj);
             }
         }
-
-        var x, y, scale, rotation;
-        x = obj["x"] || 0;
-        y = obj["y"] || 0;
-        scale = obj["scale"] === undefined ? 1 : obj["scale"];
-        rotation = obj["rotation"] || 0;
-        element.style.transform = "scale(" + scale + ") rotate(" + rotation + "deg) translate(" + x + _unit + "," + y + _unit + ")";
     }
 
-    var i, j, len, len2;
+    var i, len;
     var target, vars;
 
     this.reset();
@@ -87,15 +106,12 @@ TimelineSJ.prototype.init = function () {
     for (i = len - 1; i >= 0; i--) {
         target = this._tweenMaxAffectData[i][0];
         vars = this._tweenMaxAffectData[i][1];
+        assignStyle(target, vars);
+    }
 
-        len2 = target.length;
-        if (!len2) {
-            assignStyle(target, vars);
-        } else {
-            for (j = 0; j < len2; j++) {
-                assignStyle(target[j], vars);
-            }
-        }
+    len = this._callbackList.length;
+    for (i = 0; i < len; i++) {
+        this._callbackList[i]();
     }
 };
 
@@ -163,6 +179,14 @@ TimelineSJ.prototype.pause = function (atTime, suppressEvents) {
 };
 TimelineSJ.prototype.addLabel = function (label, position) {
     this._timeline.addLabel(label, position);
+    return this;
+};
+TimelineSJ.prototype.call = function (callback, params, scope, position) {
+    this._timeline.call(callback, params, scope, position);
+    return this;
+};
+TimelineSJ.prototype.registerCallback = function (callback) {
+    this._callbackList.push(callback);
     return this;
 };
 /*
