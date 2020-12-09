@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>doughnut</title>
-        <link rel="stylesheet" href="../../public/css/reset.css" />
-        <style>
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-            }
-            #circle {
-                width: 300px;
-                height: 300px;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="circle"></div>
-        <!-- script -->
-        <script src="./progressbar.js"></script>
-        <script>
-            window.addEventListener("load", function () {
-                const circle = new ProgressBar.Circle("#circle", {
-                    strokeWidth: 2,
-                    color: "#3a3a3a",
-                    trailColor: "#f4f4f4",
-                    easing: "easeInOut",
-                    duration: 1200,
-                });
-                setInterval(function () {
-                    circle.set(-1);
-                    circle.animate(1);
-                }, 1500);
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>doughnut</title>
+    <link rel="stylesheet" href="../../public/css/reset.css" />
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #circle {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="circle"></div>
+    <!-- script -->
+    <script src="./progressbar.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            const circle = new ProgressBar.Circle("#circle", {
+                strokeWidth: 2,
+                color: "#3a3a3a",
+                trailColor: "#f4f4f4",
+                easing: "easeInOut",
+                duration: 1200,
             });
-        </script>
-        <!-- //script -->
-    </body>
+
+            // setInterval(function () {
+            //     circle.set(-1);
+            //     circle.animate(1);
+            // }, 1500);
+        });
+    </script>
+    <!-- //script -->
+</body>
+
 </html>

@@ -12,7 +12,7 @@ ScrollEventManager.prototype.initialize = function () {
 };
 
 ScrollEventManager.prototype.isShowing = function (target, yOffset, marginRate) {
-    return window.pageYOffset + target.getBoundingClientRect().top < yOffset + screen.availHeight * (1 - Math.max(0, Math.min(1, marginRate)));
+    return window.pageYOffset + target.getBoundingClientRect().top < yOffset + window.innerHeight * (1 - Math.max(0, Math.min(1, marginRate)));
 };
 ScrollEventManager.prototype.register = function (target, marginRate, callback) {
     var tick = false;
@@ -30,6 +30,52 @@ ScrollEventManager.prototype.register = function (target, marginRate, callback) 
         }
     }
     window.addEventListener("scroll", handlingScrollEvent);
+    return this;
+};
+ScrollEventManager.prototype.isInArea = function (target, marginRate) {
+    var minY = target.offsetTop;
+    var maxY = minY + target.offsetHeight;
+    var margin = window.innerHeight * (1 - marginRate);
+    var pageYOffset = window.pageYOffset;
+
+    if (minY === void 0 || maxY === void 0) {
+        var len = target.length;
+        minY = Number.MAX_SAFE_INTEGER;
+        maxY = 0;
+
+        for (let i = 0; i < len; i++) {
+            minY = Math.min(minY, target[i].offsetTop);
+            maxY = Math.max(maxY, target[i].offsetTop + target[i].offsetHeight);
+        }
+    }
+
+    return minY - margin <= pageYOffset && pageYOffset < maxY - margin;
+};
+ScrollEventManager.prototype.registerArea = function (target, marginRate, callback) {
+    var _this = this;
+    var tick = false;
+    var isInArea = false;
+    function handlingEvent() {
+        if (!tick) {
+            tick = true;
+            window.requestAnimationFrame(function () {
+                if (_this.isInArea(target, marginRate)) {
+                    if (!isInArea) {
+                        callback();
+                        isInArea = true;
+                    }
+                } else if (isInArea) {
+                    isInArea = false;
+                }
+                tick = false;
+            });
+        }
+    }
+    window.addEventListener("scroll", handlingEvent);
+    window.addEventListener("resize", function () {
+        isInArea = false;
+        ScrollEventManager.prototype.dispatch();
+    });
     return this;
 };
 ScrollEventManager.prototype.dispatch = function () {
@@ -52,6 +98,21 @@ ScrollEventManager.prototype.registerTimeline = function (target, marginRate, ca
     });
     return this;
 };
+ScrollEventManager.prototype.registerFromTo = function (targets, marginRate, callback) {
+    var retObj = callback();
+    var duration = retObj.duration;
+    var fromVars = retObj.fromVars;
+    var toVars = retObj.toVars;
+
+    if (!targets.length) targets = [targets];
+    var targetLen = targets.length;
+    for (var i = 0; i < targetLen; i++) {
+        this.registerTimeline(targets[i], marginRate, function (tl) {
+            tl.fromTo(targets[i], duration, fromVars, toVars);
+        });
+    }
+    return this;
+}
 ScrollEventManager.prototype.registerTimelines = function (target, marginRate, callback) {
     var i, len, curIndex;
     var mediaQuery, timelineSJ, timelineSJArray;

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>jQuery Test</title>
+        <style>
+            #wrap {
+                display: none;
+            }
+            .box {
+                height: 500px;
+                width: 500px;
+                background: #e2e2e2;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="box"></div>
+        </div>
+        <!-- script -->
+        <script src="./jQuery.js"></script>
+        <script>
+            window.addEventListener("load", function () {
+                var wrap = document.querySelector("#wrap");
+                var orgDisplay = wrap.style.display;
+                var orgPosition = wrap.style.position;
+                var orgVisibility = wrap.style.visibility;
+                var height;
+
+                wrap.style.display = "block";
+                wrap.style.position = "absolute";
+                wrap.style.visibility = "hidden";
+                height = window.getComputedStyle(wrap).height;
+                wrap.style.display = orgDisplay;
+                wrap.style.position = orgPosition;
+                wrap.style.visibility = orgVisibility;
+
+                wrap.style.height = 0;
+                wrap.style.overflow = "hidden";
+                wrap.style.display = "block";
+                setTimeout(function () {
+                    $("#wrap").animate({ height: height });
+                    setTimeout(function () {
+                        $("#wrap").animate({ height: 0 });
+                        setTimeout(function () {
+                            $("#wrap").animate({ height: height });
+                        }, 500);
+                    }, 500);
+                }, 500);
+            });
+        </script>
+        <!-- //script -->
+    </body>
+</html>
