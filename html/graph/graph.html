@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>doughnut</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #canvas {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas"></div>
+    <!-- script -->
+    <script src="./dist/js/main.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            /*
+                container       원하는 container 선택자
+                colorList       원하는 색 (hex)
+                rateData        데이터
+                duration        인터렉션 시간 (ms)
+                strokeWidth     선 두께
+             */
+            const gManager = new APP.DoughnutGraphManager({
+                container: "#canvas",
+                colorList: ["#333", "#666", "#999", "#aaa", "#bbb"],
+                rateData: [40, 30, 20, 5, 5],
+                duration: 800,
+                strokeWidth: 20
+            });
+            gManager.start();
+        });
+    </script>
+    <!-- //script -->
+</body>
+
+</html>
