@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './main.js',
+    entry: ["@babel/polyfill", './main.js'],
     output: {
         path: path.resolve(__dirname, "dist"),
         library: "APP",
@@ -31,7 +31,8 @@ module.exports = {
             }
         ]
     },
-    devtool: 'source-map',
     // https://webpack.js.org/concepts/mode/#mode-development
+    // devtool: 'source-map',
+    // mode: 'development'
     mode: 'production'
 };

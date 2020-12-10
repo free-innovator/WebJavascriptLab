@@ -11,6 +11,11 @@
             padding: 0;
         }
 
+        html,
+        body {
+            min-height: 100vh;
+        }
+
         body {
             display: flex;
             justify-content: center;
@@ -21,6 +26,11 @@
         #canvas {
             width: 400px;
             height: 400px;
+        }
+
+        #canvas .percent {
+            font-size: 20px;
+            color: #fff;
         }
     </style>
 </head>
@@ -33,17 +43,17 @@
         window.addEventListener("load", function () {
             /*
                 container       원하는 container 선택자
-                colorList       원하는 색 (hex)
-                rateData        데이터
+                data            데이터 [value, color]
                 duration        인터렉션 시간 (ms)
                 strokeWidth     선 두께
-             */
+                percentMin      표시되는 %의 최소값 (%)
+            */
             const gManager = new APP.DoughnutGraphManager({
                 container: "#canvas",
-                colorList: ["#333", "#666", "#999", "#aaa", "#bbb"],
-                rateData: [40, 30, 20, 5, 5],
+                data: [[50, "#333"], [30, "#444"], [25, "#555"], [18, "#777"], [15, "#999"], [5, "#aaa"], [5, "#bbb"]],
                 duration: 800,
-                strokeWidth: 20
+                strokeWidth: 20,
+                percentMin: 4
             });
             gManager.start();
         });
