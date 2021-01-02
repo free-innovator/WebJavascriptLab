@@ -251,7 +251,7 @@ function ScrollEventManager() {
     this.initialize.apply(this, arguments);
 }
 
-ScrollEventManager.prototype.initialize = function (type) {
+ScrollEventManager.prototype.initialize = function () {
     this._globalTimeScale = 1;
     this._globalDelay = 0;
 };

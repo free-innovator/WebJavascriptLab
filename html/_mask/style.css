@@ -1,0 +1,37 @@
+@charset 'UTF-8';
+
+.section01 {height:100vh;width:100%;background:#333;-webkit-mask:url(./images/mask.png);-webkit-mask-size: 3000% 100%;-webkit-animation: mask-playzero 1s steps(29) forwards;}
+
+@-webkit-keyframes mask-playzero {
+    from {
+        -webkit-mask-position: 0 0;
+        -ms-mask-position: 0 0;
+        -moz-mask-position: 0 0;
+        -o-mask-position: 0 0;
+        mask-position: 0 0;
+    }
+    to {
+        -webkit-mask-position: 100% 0;
+        -ms-mask-position: 100% 0;
+        -moz-mask-position: 100% 0;
+        -o-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+}
+  
+@keyframes mask-playzero {
+    from {
+        -webkit-mask-position: 0 0;
+        -ms-mask-position: 0 0;
+        -moz-mask-position: 0 0;
+        -o-mask-position: 0 0;
+        mask-position: 0 0;
+    }
+    to {
+        -webkit-mask-position: 100% 0;
+        -ms-mask-position: 100% 0;
+        -moz-mask-position: 100% 0;
+        -o-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+}
