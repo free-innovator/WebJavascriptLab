@@ -343,17 +343,6 @@ ScrollEventManager.prototype.registerTimeline = function (target, marginRate, ca
     });
     return this;
 };
-
-/* 
-    callback example:
-    var pcTL = scrollEventManager.createTimeline();
-    var moTL = scrollEventManager.createTimeline();
-
-    return [
-        ["(max-width:759px)", moTL],
-        ["all", pcTL],
-    ];
-*/
 ScrollEventManager.prototype.registerTimelines = function (target, marginRate, callback) {
     var i, len, curIndex;
     var mediaQuery, timeline, timelineArray;
