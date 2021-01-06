@@ -4,25 +4,27 @@
   * NOTE:
   * NEED TweenMax Plugin.
   * 
-  * EXAMPLE:
-  * var section1 = document.querySelector(".section-01");
-  * var scrollEventManager = new ScrollEventManager();
-  * scrollEventManager
-  *     .setGlobalTimeScale(0.75)
-  *     .setGlobalDelay(0.5)
-  *     .registerTimelines(section1, 0.3, function () {
-  *         var pcTL = scrollEventManager.createTimeline();
-  *         var moTL = scrollEventManager.createTimeline();
-  *  
-  *         pcTL.fromTo(section1, 10, { backgroundColor: "#ffffff" }, { backgroundColor: "#000000" });
-  *         moTL.fromTo(section1, 10, { backgroundColor: "#ffffff" }, { backgroundColor: "#ff0000" });
-  *         return [
-  *             ["(max-width:759px)", moTL],
-  *             ["all", pcTL],
-  *         ];
-  *     })
-  *     .dispatch();
-  */
+    EXAMPLE:
+    var section1 = document.querySelector(".section-01");
+    var scrollEventManager = new ScrollEventManager();
+    scrollEventManager
+        .setGlobalTimeScale(0.75)
+        .setGlobalDelay(0.5)
+        .registerTimelines(section1, 0.3, function () {
+           var pcTL = scrollEventManager.createTimeline();
+           var moTL = scrollEventManager.createTimeline();
+    
+           pcTL.fromTo(section1, 10, { backgroundColor: "#ffffff" }, { backgroundColor: "#000000" });
+           moTL.fromTo(section1, 10, { backgroundColor: "#ffffff" }, { backgroundColor: "#ff0000" });
+           return [
+               ["(max-width:759px)", moTL],
+               ["all", pcTL],
+           ];
+       })
+       .dispatch();
+  *
+  *
+***/
 
 /*
     ==================================================
@@ -41,7 +43,7 @@ Matrix.prototype.create = function (createData) {
             data = createData ? createData[1].split(",").map(function (x) { return +x; }) : [1, 0, 0, 1, 0, 0];
             break;
         default:
-            data = [1, 0, 0, 1, 0, 0];
+            data = createData;
             break;
     }
     matrix[0][0] = data[0];
@@ -251,30 +253,33 @@ function ScrollEventManager() {
     this.initialize.apply(this, arguments);
 }
 
-ScrollEventManager.prototype.initialize = function () {
+ScrollEventManager.prototype.initialize = function (scrolledElement) {
+    this._scrolledElement = document.querySelector(scrolledElement) || window;
     this._globalTimeScale = 1;
     this._globalDelay = 0;
 };
-
+ScrollEventManager.prototype.getScrollTop = function () { return this._scrolledElement !== window ? this._scrolledElement.scrollTop : window.pageYOffset; }
 ScrollEventManager.prototype.isShowing = function (target, yOffset, marginRate) {
-    return window.pageYOffset + target.getBoundingClientRect().top < yOffset + window.innerHeight * (1 - Math.max(0, Math.min(1, marginRate)));
+    return this.getScrollTop() + target.getBoundingClientRect().top < yOffset + window.innerHeight * (1 - Math.max(0, Math.min(1, marginRate)));
 };
 ScrollEventManager.prototype.register = function (target, marginRate, callback) {
+    var _this = this;
+    var scrolledElement = this._scrolledElement;
     var tick = false;
     function handlingScrollEvent() {
-        var pageYOffset = window.pageYOffset;
+        var yOffset = _this.getScrollTop();
         if (!tick) {
             tick = true;
             window.requestAnimationFrame(function () {
-                if (ScrollEventManager.prototype.isShowing(target, pageYOffset, marginRate)) {
+                if (_this.isShowing(target, yOffset, marginRate)) {
                     callback();
-                    window.removeEventListener("scroll", handlingScrollEvent);
+                    scrolledElement.removeEventListener("scroll", handlingScrollEvent);
                 }
                 tick = false;
             });
         }
     }
-    window.addEventListener("scroll", handlingScrollEvent);
+    scrolledElement.addEventListener("scroll", handlingScrollEvent);
     return this;
 };
 ScrollEventManager.prototype.isInArea = function (target, marginRate) {
